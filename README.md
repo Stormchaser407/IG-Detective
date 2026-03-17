@@ -1,6 +1,6 @@
 # IG-Detective 🕵️‍♂️📸
 
-**Created by [@shredzwho](https://github.com/shredzwho)**
+**Created by [@shredzwho](https://github.com/shredzwho)** | **[💖 Sponsor this project](https://github.com/sponsors/shredzwho)**
 
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -16,8 +16,13 @@
 ## ⚡ Features
 
 ### 🛡️ Evasion & Stealth (Advanced)
-- **TLS Fingerprint Spoofing**: Uses `curl_cffi` to impersonate a modern Chrome browser at the network level, bypassing CDN rate-limiting.
+- **TLS Fingerprint Spoofing**: Uses a headless Playwright `chromium` browser with `playwright-stealth` to mimic a real environment, completely bypassing Cloudflare and CDN rate-limiting.
+- **Deep Evasion Fallback**: Automatically cascades to an unauthenticated headless browser fetch if an authenticated session is shadowbanned (e.g., HTTP 401/429/400 blocks), omitting cookies and forging headers to emulate a pristine pristine connection.
 - **Poisson Jitter**: Human-like randomized delays between requests to mimic natural user behavior.
+
+### ⚡ Performance & Optimization
+- **Headless Memory Tuning**: Stripped-down Playwright browser configuration that explicitly drops heavy visual assets (images, fonts, stylesheets) via route interception to achieve ultra-fast query speeds.
+- **Asynchronous Data Export**: Utilizes ThreadPool parallel downloading for the `data` archival command, drastically speeding up complete profile media replication.
 
 ### 🔍 Core Reconnaissance
 - **User Info**: Comprehensive profile details (ID, Bio, Followers, Business status).
@@ -37,6 +42,7 @@
 - **Engagement Audit (`audit`)**: Statistical detection of inauthentic bot activity via temporal jitter variance.
 
 ### 📦 Investigation Management
+- **One-Click Export (`data`)**: Automatically download a target's followers list, following list, and timeline media (with metadata JSON), packaged into a single ZIP archive.
 - **Automated Reporting**: Every command automatically saves results to JSON and TXT reports in `data/<target>/`.
 - **Autonomous Batch Mode**: Process multiple targets sequentially from a text file.
 - **Intelligent Caching**: Lightning-fast repeated queries via TTL-based caching.
@@ -82,28 +88,30 @@ You can run IG-Detective entirely within Docker to avoid dependency issues. The 
 
 1. **Launch the Shell**
    ```bash
-   python3 detective.py
+   python3 main.py
+   # or use the provided wrapper:
+   ./run.sh
    ```
 
 2. **Core Commands**
+   Once inside the shell, you must first set a target before running analysis modules:
+   
    | Command | Description |
    | :--- | :--- |
-   | `target <user>` | Set the investigation target |
-   | `info` | Show profile details |
-   | `stats` | Get engagement statistics |
-   | `addrs` | Extract location history & generate HTML map |
-   | `sna` | Perform Social Network Analysis (Inner Circle) |
-   | `temporal` | Analyze posting times & predict Time Zone |
-   | `batch <file>` | Autonomous processing of multiple handles |
-   | `tagged` | Find tagged users |
-   | `commenters` | Analyze top interactors |
-   | `fwersemail` | Scan followers for contact info (Slow) |
-   | `fwingsemail` | Scan followings for contact info (Slow) |
-   | `stories` | Fetch active story URLs |
-   | `recovery` | Account Recovery Enumeration (Forgot PWD Scan) |
-   | `intersect <u2>`| Find GPS/Time intersections with second target |
-   | `stylometry` | Generate Linguistic Signature (Bigram Analysis) |
-   | `audit` | Botnet & Inauthentic Engagement Audit |
+   | `target <user>` | Set the investigation target (Required first step) |
+   | `info` | View basic profile OSINT (bio, external links, metadata) |
+   | `posts` | Fetch the target's recent timeline activity & stats |
+   | `addrs` | Extract geographical targets from embedded GPS |
+   | `data` | Export target footprints (media, followers) to a ZIP File |
+   | `surveillance`| Continuously monitor and trace target metrics/bio changes live |
+   | `sna` | Perform Social Network Analysis to map the "Inner Circle" |
+   | `temporal`| Calculate timezone and sleep behavior via DBSCAN |
+   | `stylometry` | NLP linguistic profiling on captions (Emojis & N-grams) |
+   | `recovery` | Trigger password reset flow to reveal masked contacts |
+   | `intersect` | Cross-reference GPS/Time intersections between two targets |
+   | `audit` | Statistical detection of inauthentic bot activity |
+   | `help` | Display the interactive help menu |
+   | `exit` | Exit the CLI cleanly |
 
 ---
 
@@ -114,10 +122,12 @@ For a deep dive into the system architecture, forensic methodologies, and evasio
 ---
 
 ## 📂 Project Structure
-- `detective.py`: Main interactive shell.
-- `src/python/core/scraper.py`: Advanced scraping logic & evasion.
-- `src/python/core/analysis.py`: Deep OSINT analysis (SNA, Temporal).
-- `src/python/utils/cache.py`: High-performance caching system.
+- `main.py`: Main entrypoint for the shell.
+- `run.sh`: Launch wrapper script.
+- `src/api/`: Network layer containing the `Playwright` stealth client and auth manager.
+- `src/core/`: Foundation layer with data models and config.
+- `src/modules/`: Business logic layer with scrapers and deep analytics tools.
+- `src/cli/`: Presentation layer with the interactive prompt and Rich formatters.
 - `data/`: Automated investigative reports (git-ignored).
 
 ---
