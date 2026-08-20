@@ -1,3 +1,9 @@
+> **Archive notice — 2026-08-19**
+>
+> Archived OSINT/Cerberus Recon reference fork of shredzwho/IG-Detective. Local Docker Compose customization remains preserved for lawful future harvest.
+>
+> This repository is archived for estate cleanup, not deleted. Source and Git history remain preserved. Canonical lifecycle authority: `Stormchaser407/project-forge-registry/docs/GITHUB_ARCHIVE_BATCH_TWO_20260819.md`.
+
 # IG-Detective 🕵️‍♂️📸
 
 **Created by [@shredzwho](https://github.com/shredzwho)** | **[💖 Sponsor this project](https://github.com/sponsors/shredzwho)**
